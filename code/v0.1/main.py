@@ -6,48 +6,44 @@ class colours:
 	YELLOW = '\33[93m'
 	RED = '\33[91m'
 	GREEN = '\33[92m'
-	BLINK = '\33[6m'
 	WHITE = '\33[0m'
 
 times_tried = 1
 trying = False
 
-print("WELCOME TO Database Centre 1")
+print("Welcome to Database Centre 1")
 userInput = input("Enter Action: ")
 print()
 if userInput == "Enter Password":
 	trying = True
+	userInput = input(f"{colours.WHITE}Enter Username: ")
 	while trying:
 		passwordInput = input(f"{colours.WHITE}Enter Password: ")
-		file = open('password.txt', 'r')
-		password = file.readline()
+		accounts_file = open('accounts.txt', 'r')
+		accounts_dict = accounts_file.readlines()
+		password = accounts_dict.get(userInput.title())
 		if passwordInput == password:
 			print(f"{colours.GREEN}{colours.BLINK}Welcome Ryan!")
 			password = randint(0, 9999)
 			file = open('password.txt', 'w')
 			file.write(str(password))
 			file.close()
-			sys.exit()
-		else:
-			print(f"{colours.RED}You got the wrong password.")
-			if times_tried == 3:
-				print(f"{colours.RED}You have used up all your tries.")
-				trying = False
-			else:
-				times_tried += 1
-elif userInput == "Change Password":
-	trying = True
-	while trying:
-		passwordInput = input(f"{colours.WHITE}Enter Password: ")
-		file = open('password.txt', 'r')
-		password = file.readline()
-		if passwordInput == password:
-			password = str(randint(0, 9999))
-			file = open('password.txt', 'w')
-			file.write(password)
-			file.close()
-			print(f"{colours.GREEN}Password has been successfully changed.")
-			sys.exit()
+			menuInput = input("Enter Action: ")
+			if menuInput == "Change Password":
+				new_password = str(randint(0, 9999))
+				file = open('password.txt', 'w')
+				file.write(password)
+				file.close()
+				print(f"{colours.GREEN}Password has been successfully changed.")
+				sys.exit()
+			elif menuInput == "Add New Account":
+				if userInput.title() == "Admin Account":
+					newUsername = input("Enter New Username: ")
+					newPassword = int(input("Enter New Password: "))
+					accounts_dict[newUsername] = newPassword
+					print(f"{colours.GREEN}New user {newUsername.title} added!")
+				else:
+					print(f"{colours.RED}You do not have permission to add a new account. Please use the admin account.")
 		else:
 			print(f"{colours.RED}You got the wrong password.")
 			if times_tried == 3:
