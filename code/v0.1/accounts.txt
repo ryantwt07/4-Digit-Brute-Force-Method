@@ -1,3 +1,0 @@
-{
-    "Admin Account": 0000,
-}
